@@ -46,6 +46,7 @@ option(USE_PCSC          "Enable experimental PCSC support"        ON)
 option(USE_WINHELLO      "Abstract Windows Hello as a FIDO device" ON)
 option(NFC_LINUX         "Enable NFC support on Linux"             ON)
 option(USE_VIRTUAL       "Enable virtual device support"           ON)
+option(FORCE_DEBUG       "Force debug logging"                     ON)
 
 add_definitions(-D_FIDO_MAJOR=${FIDO_MAJOR})
 add_definitions(-D_FIDO_MINOR=${FIDO_MINOR})
@@ -386,8 +387,12 @@ if(USE_PCSC)
 	add_definitions(-DUSE_PCSC)
 endif()
 
-if (USE_VIRTUAL)
+if(USE_VIRTUAL)
 	add_definitions(-DUSE_VIRTUAL)
+endif()
+
+if (FORCE_DEBUG)
+	add_definitions(-DFORCE_DEBUG)
 endif()
 
 # export list

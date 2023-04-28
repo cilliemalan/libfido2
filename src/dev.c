@@ -412,7 +412,9 @@ fido_dev_io_handle(const fido_dev_t *dev)
 void
 fido_init(int flags)
 {
+#ifndef FORCE_DEBUG
 	if (flags & FIDO_DEBUG || getenv("FIDO_DEBUG") != NULL)
+#endif
 		fido_log_init();
 
 	disable_u2f_fallback = (flags & FIDO_DISABLE_U2F_FALLBACK);

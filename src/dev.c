@@ -274,7 +274,7 @@ fido_dev_info_manifest(fido_dev_info_t *devlist, size_t ilen, size_t *olen)
 	run_manifest(devlist, ilen, olen, "winhello", fido_winhello_manifest);
 #endif
 #ifdef USE_VIRTUAL
-	run_manifest(devlist, ilen, olen, "udp", fido_virtual_manifest);
+	run_manifest(devlist, ilen, olen, "virtual", fido_virtual_manifest);
 #endif
 
 	return (FIDO_OK);

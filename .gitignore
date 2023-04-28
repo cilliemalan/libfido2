@@ -7,3 +7,5 @@ fuzz/obj/
 fuzz/report
 fuzz/*.so
 output/
+.vscode/
+

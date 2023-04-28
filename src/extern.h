@@ -151,6 +151,16 @@ int fido_winhello_get_assert(fido_dev_t *, fido_assert_t *, const char *, int);
 int fido_winhello_get_cbor_info(fido_dev_t *, fido_cbor_info_t *);
 int fido_winhello_make_cred(fido_dev_t *, fido_cred_t *, const char *, int);
 
+/* virtual */
+bool fido_is_virtual(const char *);
+void *fido_virtual_open(const char *path);
+void fido_virtual_close(void *);
+int fido_virtual_read(void *, unsigned char *, size_t, int);
+int fido_virtual_write(void *, const unsigned char *, size_t);
+int fido_virtual_rx(fido_dev_t *, uint8_t, unsigned char *, size_t, int);
+int fido_virtual_tx(fido_dev_t *, uint8_t, const unsigned char *, size_t);
+int fido_dev_set_virtual(fido_dev_t *);
+
 /* generic i/o */
 int fido_rx_cbor_status(fido_dev_t *, int *);
 int fido_rx(fido_dev_t *, uint8_t, void *, size_t, int *);
@@ -242,6 +252,7 @@ int fido_get_signed_hash_tpm(fido_blob_t *, const fido_blob_t *,
 int fido_hid_manifest(fido_dev_info_t *, size_t, size_t *);
 int fido_nfc_manifest(fido_dev_info_t *, size_t, size_t *);
 int fido_pcsc_manifest(fido_dev_info_t *, size_t, size_t *);
+int fido_virtual_manifest(fido_dev_info_t *, size_t, size_t *);
 
 /* fuzzing instrumentation */
 #ifdef FIDO_FUZZ
@@ -259,6 +270,7 @@ uint32_t uniform_random(uint32_t);
 #define FIDO_DEV_UV_UNSET	0x080
 #define FIDO_DEV_TOKEN_PERMS	0x100
 #define FIDO_DEV_WINHELLO	0x200
+#define FIDO_DEV_VIRTUAL	0x400
 
 /* miscellanea */
 #define FIDO_DUMMY_CLIENTDATA	""
@@ -268,6 +280,7 @@ uint32_t uniform_random(uint32_t);
 #define FIDO_WINHELLO_PATH	"windows://hello"
 #define FIDO_NFC_PREFIX		"nfc:"
 #define FIDO_PCSC_PREFIX	"pcsc:"
+#define FIDO_VIRTUAL_PATH   "virtual:"
 
 #ifdef __cplusplus
 } /* extern "C" */

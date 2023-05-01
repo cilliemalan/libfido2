@@ -31,7 +31,6 @@ static bool winsock_initialized = false;
 #define DEFAULT_TIMEOUT_MS 3000
 #define MAX_PATH_LEN 256
 
-#define vdev(d) ((vdev_t *)d->io_handle)
 typedef struct _vdev
 {
     SOCKET fd;
@@ -233,19 +232,11 @@ int fido_dev_set_virtual(fido_dev_t *d)
     };
     d->transport = (fido_dev_transport_t){0};
     d->io_own = true;
-    d->io_handle = calloc(1, sizeof(vdev_t));
-    d->path = (char *)(FIDO_VIRTUAL_PATH "localhost:" DEFAULT_LISTEN_PORT);
+    d->io_handle = NULL;
+    d->path = strdup(FIDO_VIRTUAL_PATH "localhost:" DEFAULT_LISTEN_PORT);
     d->rx_len = CTAP_MAX_REPORT_LEN;
     d->tx_len = CTAP_MAX_REPORT_LEN;
     d->flags = FIDO_DEV_VIRTUAL;
-
-    if (d->io_handle == NULL)
-    {
-        fido_log_debug("%s: out of memory", __func__);
-        return -1;
-    }
-
-    vdev(d)->fd = INVALID_SOCKET;
 
     return 0;
 }
@@ -327,15 +318,15 @@ int fido_virtual_write(void *handle, const unsigned char *buf, size_t len)
         fido_log_debug("%s: invalid handle", __func__);
         return -1;
     }
-    if (len != CTAP_MAX_REPORT_LEN)
+    if (len != CTAP_MAX_REPORT_LEN + 1)
     {
-        fido_log_debug("%s: invalid write length: %zu (must be %d)", __func__, len, CTAP_MAX_REPORT_LEN);
+        fido_log_debug("%s: invalid write length: %zu (must be %d)", __func__, len, CTAP_MAX_REPORT_LEN + 1);
         return -1;
     }
 
-    int nwrite = send(v->fd, (const char *)buf, (int)len, 0);
+    int nwrite = send(v->fd, (const char *)buf + 1, (int)len - 1, 0);
 
-    if (nwrite != len)
+    if (nwrite != len - 1)
     {
         fido_log_error(errno, "%s: Send error. Return code: %d  errno is %d", __func__, nwrite, errno);
         return -1;

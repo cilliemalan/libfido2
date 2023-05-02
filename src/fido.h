@@ -268,6 +268,14 @@ int fido_dev_largeblob_get_array(fido_dev_t *, unsigned char **, size_t *);
 int fido_dev_largeblob_set_array(fido_dev_t *, const unsigned char *, size_t,
     const char *);
 
+const char *fido_register_virtual_device(
+    fido_dev_direct_open_t *open,
+    fido_dev_direct_close_t *close,
+    fido_dev_io_read_t *read,
+    fido_dev_io_write_t *write,
+    void *user);
+void fido_unregister_virtual_device(const char *path);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */

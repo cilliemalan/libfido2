@@ -49,6 +49,8 @@ typedef int   fido_dev_io_read_t(void *, unsigned char *, size_t, int);
 typedef int   fido_dev_io_write_t(void *, const unsigned char *, size_t);
 typedef int   fido_dev_rx_t(struct fido_dev *, uint8_t, unsigned char *, size_t, int);
 typedef int   fido_dev_tx_t(struct fido_dev *, uint8_t, const unsigned char *, size_t);
+typedef void  fido_dev_direct_open_t(void *user);
+typedef void  fido_dev_direct_close_t(void *user);
 
 typedef struct fido_dev_io {
 	fido_dev_io_open_t  *open;

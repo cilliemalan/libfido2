@@ -136,6 +136,7 @@ if(BUILD_STATIC_LIBS)
 		set_target_properties(fido2 PROPERTIES OUTPUT_NAME fido2_static)
 	endif()
 	target_link_libraries(fido2 ${TARGET_LIBRARIES})
+	target_include_directories(fido2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 	install(TARGETS fido2 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endif()
@@ -146,6 +147,7 @@ if(BUILD_SHARED_LIBS)
 	set_target_properties(fido2_shared PROPERTIES OUTPUT_NAME fido2
 		VERSION ${FIDO_VERSION} SOVERSION ${FIDO_MAJOR})
 	target_link_libraries(fido2_shared ${TARGET_LIBRARIES})
+	target_include_directories(fido2_shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 	install(TARGETS fido2_shared
 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

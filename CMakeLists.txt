@@ -3,12 +3,11 @@
 # license that can be found in the LICENSE file.
 # SPDX-License-Identifier: BSD-2-Clause
 
-cmake_minimum_required(VERSION 3.0)
-
 # detect AppleClang; needs to come before project()
 cmake_policy(SET CMP0025 NEW)
 
 project(libfido2 C)
+cmake_minimum_required(VERSION 3.0)
 # Set PIE flags for POSITION_INDEPENDENT_CODE targets, added in CMake 3.14.
 if(POLICY CMP0083)
 	cmake_policy(SET CMP0083 NEW)
@@ -68,7 +67,7 @@ endif()
 
 if(APPLE)
 	set(CMAKE_INSTALL_NAME_DIR
-	    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+		"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 endif()
 
 if(NOT MSVC)
@@ -81,7 +80,7 @@ if(NOT MSVC)
 		set(FIDO_CFLAGS "${FIDO_CFLAGS} -D_GNU_SOURCE")
 		set(FIDO_CFLAGS "${FIDO_CFLAGS} -D_DEFAULT_SOURCE")
 	elseif(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR
-	    CMAKE_SYSTEM_NAME STREQUAL "MidnightBSD")
+		CMAKE_SYSTEM_NAME STREQUAL "MidnightBSD")
 		set(FIDO_CFLAGS "${FIDO_CFLAGS} -D__BSD_VISIBLE=1")
 	elseif(CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
 		set(FIDO_CFLAGS "${FIDO_CFLAGS} -D_NETBSD_SOURCE")
@@ -122,9 +121,9 @@ check_symbol_exists(timingsafe_bcmp string.h HAVE_TIMINGSAFE_BCMP)
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 try_compile(HAVE_POSIX_IOCTL
-    "${CMAKE_CURRENT_BINARY_DIR}/posix_ioctl_check.o"
-    "${CMAKE_CURRENT_SOURCE_DIR}/openbsd-compat/posix_ioctl_check.c"
-    COMPILE_DEFINITIONS "-Werror -Woverflow -Wsign-conversion")
+	"${CMAKE_CURRENT_BINARY_DIR}/posix_ioctl_check.o"
+	"${CMAKE_CURRENT_SOURCE_DIR}/openbsd-compat/posix_ioctl_check.c"
+	COMPILE_DEFINITIONS "-Werror -Woverflow -Wsign-conversion")
 
 list(APPEND CHECK_VARIABLES
 	HAVE_ARC4RANDOM_BUF
@@ -225,7 +224,7 @@ if(MSVC)
 	# The construction in the following 3 lines was taken from LibreSSL's
 	# CMakeLists.txt.
 	string(REPLACE "C" " -wd" MSVC_DISABLED_WARNINGS_STR
-	    ${MSVC_DISABLED_WARNINGS_LIST})
+		${MSVC_DISABLED_WARNINGS_LIST})
 	string(REGEX REPLACE "[/-]W[1234][ ]?" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -MP -W4 -WX ${MSVC_DISABLED_WARNINGS_STR}")
 	# set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} /Od /Z7 /guard:cf /sdl /RTCcsu")
@@ -258,7 +257,7 @@ else()
 		if(NOT HAVE_CLOCK_GETTIME)
 			# Look for clock_gettime in librt.
 			check_library_exists(rt clock_gettime "time.h"
-			    HAVE_CLOCK_GETTIME)
+				HAVE_CLOCK_GETTIME)
 			if (HAVE_CLOCK_GETTIME)
 				add_definitions(-DHAVE_CLOCK_GETTIME)
 				set(BASE_LIBRARIES ${BASE_LIBRARIES} rt)
@@ -368,35 +367,35 @@ if(APPLE AND (CMAKE_C_COMPILER_ID STREQUAL "Clang" OR
    CMAKE_C_COMPILER_ID STREQUAL "AppleClang"))
 	# clang + lld
 	string(CONCAT CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
-	    " -exported_symbols_list ${CMAKE_CURRENT_SOURCE_DIR}/src/export.llvm")
+		" -exported_symbols_list ${CMAKE_CURRENT_SOURCE_DIR}/src/export.llvm")
 elseif(NOT MSVC)
 	# clang/gcc + gnu ld
 	if(FUZZ)
 		string(CONCAT CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
-		    " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/fuzz/export.gnu")
+			" -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/fuzz/export.gnu")
 	else()
 		string(CONCAT CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
-		    " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/export.gnu")
+			" -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/export.gnu")
 	endif()
 	if(NOT WIN32)
 		string(CONCAT CMAKE_SHARED_LINKER_FLAGS
-		    ${CMAKE_SHARED_LINKER_FLAGS}
-		    " -Wl,-z,noexecstack -Wl,-z,relro,-z,now")
+			${CMAKE_SHARED_LINKER_FLAGS}
+			" -Wl,-z,noexecstack -Wl,-z,relro,-z,now")
 		string(CONCAT CMAKE_EXE_LINKER_FLAGS
-		    ${CMAKE_EXE_LINKER_FLAGS}
-		    " -Wl,-z,noexecstack -Wl,-z,relro,-z,now")
+			${CMAKE_EXE_LINKER_FLAGS}
+			" -Wl,-z,noexecstack -Wl,-z,relro,-z,now")
 		if(FUZZ)
 			file(STRINGS fuzz/wrapped.sym WRAPPED_SYMBOLS)
 			foreach(s ${WRAPPED_SYMBOLS})
 				string(CONCAT CMAKE_SHARED_LINKER_FLAGS
-				    ${CMAKE_SHARED_LINKER_FLAGS}
-				    " -Wl,--wrap=${s}")
+					${CMAKE_SHARED_LINKER_FLAGS}
+					" -Wl,--wrap=${s}")
 			endforeach()
 		endif()
 	endif()
 else()
 	string(CONCAT CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
-	    " /def:\"${CMAKE_CURRENT_SOURCE_DIR}/src/export.msvc\"")
+		" /def:\"${CMAKE_CURRENT_SOURCE_DIR}/src/export.msvc\"")
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/src)

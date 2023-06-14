@@ -14,10 +14,6 @@
 
 #include "posix_win.h"
 
-#if defined(_MSC_VER)
-#pragma warning(disable:4996)
-#endif
-
 int
 posix_open(const char *path, ...)
 {

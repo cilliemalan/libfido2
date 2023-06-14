@@ -16,7 +16,6 @@
 
 #if defined(_MSC_VER)
 __declspec(noreturn)
-#pragma warning(disable:4996)
 #else
 __attribute__((noreturn))
 #endif

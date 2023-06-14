@@ -273,9 +273,6 @@ fido_dev_info_manifest(fido_dev_info_t *devlist, size_t ilen, size_t *olen)
 #ifdef USE_WINHELLO
 	run_manifest(devlist, ilen, olen, "winhello", fido_winhello_manifest);
 #endif
-#ifdef USE_VIRTUAL
-	run_manifest(devlist, ilen, olen, "virtual", fido_virtual_manifest);
-#endif
 
 	return (FIDO_OK);
 }
@@ -305,12 +302,6 @@ fido_dev_open(fido_dev_t *dev, const char *path)
 #ifdef USE_PCSC
 	if (fido_is_pcsc(path) && fido_dev_set_pcsc(dev) < 0) {
 		fido_log_debug("%s: fido_dev_set_pcsc", __func__);
-		return FIDO_ERR_INTERNAL;
-	}
-#endif
-#ifdef USE_VIRTUAL
-	if (fido_is_virtual(path) && fido_dev_set_virtual(dev) < 0) {
-		fido_log_debug("%s: fido_dev_set_virtual", __func__);
 		return FIDO_ERR_INTERNAL;
 	}
 #endif
@@ -412,9 +403,7 @@ fido_dev_io_handle(const fido_dev_t *dev)
 void
 fido_init(int flags)
 {
-#ifndef FORCE_DEBUG
 	if (flags & FIDO_DEBUG || getenv("FIDO_DEBUG") != NULL)
-#endif
 		fido_log_init();
 
 	disable_u2f_fallback = (flags & FIDO_DISABLE_U2F_FALLBACK);

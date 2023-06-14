@@ -45,8 +45,6 @@ option(USE_HIDAPI        "Use hidapi as the HID backend"           OFF)
 option(USE_PCSC          "Enable experimental PCSC support"        OFF)
 option(USE_WINHELLO      "Abstract Windows Hello as a FIDO device" OFF)
 option(NFC_LINUX         "Enable NFC support on Linux"             OFF)
-option(USE_VIRTUAL       "Enable virtual device support"           ON)
-option(FORCE_DEBUG       "Force debug logging"                     OFF)
 
 add_definitions(-D_FIDO_MAJOR=${FIDO_MAJOR})
 add_definitions(-D_FIDO_MINOR=${FIDO_MINOR})
@@ -363,14 +361,6 @@ add_definitions(-DTLS=${TLS})
 
 if(USE_PCSC)
 	add_definitions(-DUSE_PCSC)
-endif()
-
-if(USE_VIRTUAL)
-	add_definitions(-DUSE_VIRTUAL)
-endif()
-
-if (FORCE_DEBUG)
-	add_definitions(-DFORCE_DEBUG)
 endif()
 
 # export list

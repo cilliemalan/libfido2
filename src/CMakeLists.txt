@@ -59,10 +59,6 @@ if(USE_PCSC)
 	list(APPEND FIDO_SOURCES nfc.c pcsc.c)
 endif()
 
-if(USE_VIRTUAL)
-	list(APPEND FIDO_SOURCES virtual.c)
-endif()
-
 if(USE_HIDAPI)
 	list(APPEND FIDO_SOURCES hid_hidapi.c)
 	if(NOT WIN32 AND NOT APPLE)
